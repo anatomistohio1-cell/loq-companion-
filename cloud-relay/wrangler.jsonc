@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nerv-loq-relay",
+  "main": "src/index.mjs",
+  "compatibility_date": "2026-11-16",
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "DEVICE_ROOM",
+        "class_name": "LoqDeviceRoom"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["LoqDeviceRoom"]
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

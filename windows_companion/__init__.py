@@ -1,0 +1,1 @@
+"""Windows companion service package."""
