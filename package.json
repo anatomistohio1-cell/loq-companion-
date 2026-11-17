@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npm run build:nerv",
+    "build": "npm run build:loq",
     "build:nerv": "node scripts/build-deploy.mjs nerv",
     "build:loq": "node scripts/build-deploy.mjs loq",
     "relay:dev": "wrangler dev --config cloud-relay/wrangler.jsonc",

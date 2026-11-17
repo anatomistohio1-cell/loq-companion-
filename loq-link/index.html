@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Pair and monitor the authenticated Windows LOQ Link companion." />
+    <title>LOQ Link | NERV</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell page-shell">
+      <header class="topbar">
+        <a class="brand-anchor" href="./" aria-label="LOQ Link home">
+          <span class="brand-mark">N</span>
+          <div>
+            <p class="eyebrow">Windows companion</p>
+            <h1>LOQ LINK</h1>
+          </div>
+        </a>
+        <div class="topbar-actions">
+          <a class="ghost-button" id="nervDeckLink" href="#">Open NERV Deck</a>
+        </div>
+      </header>
+
+      <main class="page-view">
+        <section class="card single-page-card loq-link-page">
+          <div class="card-header">
+            <div>
+              <p class="eyebrow">AUTHENTICATED OUTBOUND CONNECTION</p>
+              <h2>Connect this laptop</h2>
+            </div>
+            <div class="inline-status muted" id="loqLinkStatus">DISCONNECTED</div>
+          </div>
+
+          <p class="source-note" id="loqLinkMessage" role="status" aria-live="polite">
+            Start LOQ Link on the Windows laptop, then enter its pairing code. The companion connects outbound over TLS; no laptop port forwarding is required.
+          </p>
+
+          <form id="loqLinkPairForm" class="companion-connect-form">
+            <label class="companion-field" for="loqLinkPairingCode">
+              <span>Pairing code</span>
+              <input
+                id="loqLinkPairingCode"
+                name="pairingCode"
+                type="password"
+                autocomplete="off"
+                minlength="16"
+                maxlength="512"
+                required
+              />
+            </label>
+            <div class="connect-actions">
+              <button class="control-button" id="loqLinkPairButton" type="submit">Pair laptop</button>
+              <button class="control-button alt" id="loqLinkDisconnectButton" type="button">Disconnect</button>
+            </div>
+          </form>
+
+          <section aria-labelledby="loqLinkMetricsHeading">
+            <div class="card-header">
+              <div>
+                <p class="eyebrow">WINDOWS TELEMETRY</p>
+                <h2 id="loqLinkMetricsHeading">System status</h2>
+              </div>
+              <button class="control-button alt" id="loqLinkRefreshButton" type="button">Refresh</button>
+            </div>
+            <div class="loq-grid">
+              <div class="metric-card"><span class="metric-label">Device</span><strong id="loqLinkDeviceName">—</strong></div>
+              <div class="metric-card"><span class="metric-label">CPU</span><strong id="loqLinkCpu">—</strong></div>
+              <div class="metric-card"><span class="metric-label">Memory</span><strong id="loqLinkMemory">—</strong></div>
+              <div class="metric-card"><span class="metric-label">Battery</span><strong id="loqLinkBattery">—</strong></div>
+            </div>
+          </section>
+
+          <section class="audio-output-section" aria-labelledby="loqLinkOutputsHeading">
+            <div class="card-header">
+              <div>
+                <p class="eyebrow">WINDOWS CORE AUDIO</p>
+                <h2 id="loqLinkOutputsHeading">Detected playback outputs</h2>
+              </div>
+              <span class="race-calendar-verified" id="loqLinkOutputCount">Not connected</span>
+            </div>
+            <div class="audio-endpoint-list" id="loqLinkEndpoints" aria-live="polite"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+    <script src="deployment-config.js"></script>
+    <script src="loq-link.js"></script>
+  </body>
+</html>
