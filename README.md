@@ -31,7 +31,7 @@ Open `http://localhost:8080`. For isolated direct-local companion testing, the d
 From the project directory:
 
 ```powershell
-pip install -r requirements.txt
+pip install -r windows_companion/requirements.txt
 $env:NERV_PAIRING_TOKEN = "<set a strong random pairing code>"
 $env:NERV_ALLOWED_ORIGINS = "http://localhost:8080"
 python -m windows_companion.server
