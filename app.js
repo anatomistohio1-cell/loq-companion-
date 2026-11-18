@@ -1105,6 +1105,22 @@ const attachCompanionControls = () => {
     if (urlInput.value) urlInput.closest('details')?.setAttribute('open', '');
   }
 
+  // Auto-pair if code is provided in URL (?code=1234)
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const codeParam = params.get('code');
+    if (codeParam && pairingCodeInput) {
+      pairingCodeInput.value = codeParam;
+      if (form) {
+        setTimeout(() => {
+          form.dispatchEvent(new Event('submit', { cancelable: true }));
+        }, 300);
+      }
+    }
+  } catch (e) {
+    console.warn('URL auto-pair error:', e);
+  }
+
   if (form && urlInput && pairingCodeInput) {
     form.addEventListener('submit', async (event) => {
       event.preventDefault();

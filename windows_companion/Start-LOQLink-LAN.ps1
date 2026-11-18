@@ -31,12 +31,22 @@ if (-not $ip) {
   $ip = "192.168.1.23"
 }
 
+$connectUrl = "http://${ip}:${port}/connect.html?code=${token}"
+
+Write-Host ""
 Write-Host "==========================================================" -ForegroundColor Green
-Write-Host "  NERV LOQ Companion starting on LAN!" -ForegroundColor Cyan
-Write-Host "  Open on your mobile phone / browser at:" -ForegroundColor Yellow
-Write-Host "  👉 http://${ip}:${port}/" -ForegroundColor Green
-Write-Host "  Pairing Code: $token" -ForegroundColor Green
+Write-Host "  SCAN QR CODE WITH YOUR PHONE CAMERA TO CONNECT INSTANTLY" -ForegroundColor Yellow
 Write-Host "==========================================================" -ForegroundColor Green
+Write-Host ""
+
+# Print ASCII QR Code directly in PowerShell
+& $python -c "import qrcode; qr = qrcode.QRCode(); qr.add_data('$connectUrl'); qr.print_ascii(invert=True)"
+
+Write-Host ""
+Write-Host "Direct Mobile URL : $connectUrl" -ForegroundColor Cyan
+Write-Host "Pairing PIN       : $token" -ForegroundColor Yellow
+Write-Host "==========================================================" -ForegroundColor Green
+Write-Host ""
 
 try {
   Set-Location $projectRoot

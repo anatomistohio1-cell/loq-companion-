@@ -201,6 +201,22 @@ getElement('loqLinkDisconnectButton').addEventListener('click', async () => {
   setStatus(false, 'Disconnected from this laptop.');
 });
 
+// Auto-pair if code is in URL (?code=1234)
+try {
+  const params = new URLSearchParams(window.location.search);
+  const codeParam = params.get('code');
+  const codeInput = getElement('loqLinkPairingCode');
+  const pairForm = getElement('loqLinkPairForm');
+  if (codeParam && codeInput && pairForm) {
+    codeInput.value = codeParam;
+    setTimeout(() => {
+      pairForm.dispatchEvent(new Event('submit', { cancelable: true }));
+    }, 300);
+  }
+} catch (e) {
+  console.warn('URL auto-pair error:', e);
+}
+
 getElement('loqLinkRefreshButton').addEventListener('click', () => void refresh());
 const deckLink = getElement('nervDeckLink');
 if (deckLink && window.NERV_DEPLOYMENT_CONFIG?.deckUrl) {
