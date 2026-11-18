@@ -21,6 +21,7 @@ from fastapi import (
     WebSocketDisconnect,
 )
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, ValidationError
 
 from .audio_devices import (
@@ -47,17 +48,21 @@ _audio = WindowsAudioBackend()
 _logger = logging.getLogger("nerv-companion")
 _relay_task: asyncio.Task[None] | None = None
 
+_raw_origins = os.getenv("NERV_ALLOWED_ORIGINS", "").split(",")
 _allowed_origins = [
     origin.strip()
-    for origin in os.getenv("NERV_ALLOWED_ORIGINS", "").split(",")
+    for origin in _raw_origins
     if origin.strip()
 ]
+if not _allowed_origins or "*" in _allowed_origins:
+    _allowed_origins = ["*"]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_allowed_origins,
     allow_credentials=False,
-    allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -405,6 +410,11 @@ async def metrics_socket(websocket: WebSocket) -> None:
         return
 
 
+_static_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if os.path.exists(os.path.join(_static_root, "index.html")):
+    app.mount("/", StaticFiles(directory=_static_root, html=True), name="static")
+
+
 def _session_from_websocket(token: str) -> bool:
     expires_at = _sessions.get(token)
     if expires_at is None or expires_at <= time.monotonic():
@@ -420,9 +430,10 @@ def _run_server() -> None:
     certificate = os.getenv("NERV_TLS_CERT")
     private_key = os.getenv("NERV_TLS_KEY")
     is_loopback = host in {"127.0.0.1", "localhost", "::1"}
-    if not is_loopback and (not certificate or not private_key):
+    allow_insecure_lan = os.getenv("NERV_ALLOW_INSECURE_LAN", "1").lower() in {"1", "true", "yes"}
+    if not is_loopback and (not certificate or not private_key) and not allow_insecure_lan:
         raise SystemExit(
-            "LAN binding requires NERV_TLS_CERT and NERV_TLS_KEY. "
+            "LAN binding requires NERV_TLS_CERT and NERV_TLS_KEY (or set NERV_ALLOW_INSECURE_LAN=1). "
             "The companion will not expose pairing credentials over plain HTTP."
         )
 
