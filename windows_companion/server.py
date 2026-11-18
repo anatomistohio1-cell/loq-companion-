@@ -67,7 +67,7 @@ app.add_middleware(
 
 
 class PairRequest(BaseModel):
-    token: str = Field(min_length=12, max_length=512)
+    token: str = Field(min_length=1, max_length=512)
 
 
 class EndpointRequest(BaseModel):

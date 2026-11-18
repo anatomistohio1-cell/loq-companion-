@@ -19,7 +19,7 @@ $env:NERV_ALLOW_INSECURE_LAN = "1"
 $env:NERV_ALLOWED_ORIGINS = "*"
 
 # Default or prompt pairing token
-$defaultPairing = "nerv-loq-control-pass1234"
+$defaultPairing = "1234"
 $token = Read-Host "Enter Pairing Code (press Enter for default: '$defaultPairing')"
 if ([string]::IsNullOrWhiteSpace($token)) {
   $token = $defaultPairing
